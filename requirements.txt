@@ -1,0 +1,7 @@
+python pandas
+SQLlite 3
+data format in csv
+kaggle
+numpy
+O*NET Database
+flask pandas
