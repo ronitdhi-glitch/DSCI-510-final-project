@@ -5,7 +5,7 @@ from kaggle.api.kaggle_api_extended import KaggleApi
 
 DATASET = "sahilislam007/ai-impact-on-job-market-20242030"
 DOWNLOAD_DIR = "data"
-CSV_NAME = "Ai_Impact_On_Job_Market.csv"  # Kaggle file inside ZIP
+CSV_NAME = "ai_job_trends_dataset.csv"  # Kaggle file inside ZIP
 
 
 def download_kaggle_dataset():
@@ -19,7 +19,7 @@ def download_kaggle_dataset():
     api = KaggleApi()
     api.authenticate()
 
-    zip_path = os.path.join(DOWNLOAD_DIR, "dataset.zip")
+    zip_path = os.path.join(DOWNLOAD_DIR, "ai-impact-on-job-market-20242030.zip")
 
     if not os.path.exists(zip_path):
         print("Downloading Kaggle dataset...")

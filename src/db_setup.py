@@ -1,7 +1,12 @@
 import sqlite3
+import os
 
 def create_connection(db_path="../database/jobs_data.db"):
     """Create and return a database connection."""
+
+    # Ensure the folder exists
+    os.makedirs(os.path.dirname(db_path), exist_ok=True)
+
     conn = sqlite3.connect(db_path)
     return conn
 

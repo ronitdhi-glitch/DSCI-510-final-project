@@ -1,5 +1,7 @@
 import os
 import sys
+import sqlite3
+
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
@@ -7,8 +9,6 @@ from kaggle_service import download_kaggle_dataset
 from job_filter import filter_high_risk_jobs
 from db_setup import create_connection, create_table
 from csv_to_db import insert_data_from_csv
-
-import sqlite3
 
 
 def fetch_supplemental_jobs(db_path="../database/jobs_data.db"):
@@ -33,27 +33,22 @@ def main():
     print("\n===== AI JOB LOSS ANALYSIS STARTED =====\n")
 
     print("Downloading Kaggle dataset...")
-
     csv_path = download_kaggle_dataset()
 
-    # Output CSV path (goes to data folder OUTSIDE src)
-    filtered_output = os.path.join("../data", "jobs_likely_to_lose.csv")
+    filtered_output = os.path.join("../data", "ai_job_trends_dataset.csv")
 
     high_risk_jobs = filter_high_risk_jobs(csv_path, filtered_output)
 
     print(f"High-risk job records: {len(high_risk_jobs)}")
     print(f"Saved filtered CSV to: {filtered_output}\n")
 
-
     print("Setting up database...")
-
     conn = create_connection()
     create_table(conn)
     conn.close()
 
     print("Inserting CSV data into database...")
     insert_data_from_csv()
-
 
     print("\nFetching supplemental jobs...")
     supplemental_jobs = fetch_supplemental_jobs()
@@ -68,6 +63,7 @@ def main():
         print(f"\n...and {len(supplemental_jobs) - 10} more jobs.\n")
 
     print("\n===== ANALYSIS COMPLETE =====\n")
+
 
 
 if __name__ == "__main__":
