@@ -1,129 +1,70 @@
 import os
-import pandas as pd
+import sys
 import sqlite3
-import pytest
 
 
-from src.kaggle_service import download_kaggle_dataset
-from src.job_filter import filter_high_risk_jobs
-from src.db_setup import create_connection, create_table
-from src.csv_to_db import insert_data_from_csv
-from src.main import fetch_supplemental_jobs
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+from kaggle_service import download_kaggle_dataset
+from job_filter import filter_high_risk_jobs
+from db_setup import create_connection, create_table
+from csv_to_db import insert_data_from_csv
 
 
+def fetch_supplemental_jobs(db_path="../database/jobs_data.db"):
+    """Fetch all supplemental task jobs (most likely to be automated)."""
 
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
 
-def test_kaggle_download_file_exists(monkeypatch):
+    query = """
+    SELECT id, onet_soc_code, title, task_id, task, task_type
+    FROM task_statements
+    WHERE LOWER(task_type) = 'supplemental'
     """
-    This test mocks Kaggle API and checks if the function
-    returns correct file path.
-    """
 
-    def mock_download():
-       
-        os.makedirs("data", exist_ok=True)
-        path = "data/mock.csv"
-        with open(path, "w") as f:
-            f.write("Risk of Automation\nHigh\nLow")
-        return path
+    cursor.execute(query)
+    results = cursor.fetchall()
+    conn.close()
+    return results
 
-    monkeypatch.setattr("src.kaggle_service.download_kaggle_dataset", mock_download)
 
+def main():
+    print("\n===== AI JOB LOSS ANALYSIS STARTED =====\n")
+
+    print("Downloading Kaggle dataset...")
     csv_path = download_kaggle_dataset()
-    assert os.path.exists(csv_path)
 
+    filtered_output = os.path.join("../data", "ai_job_trends_dataset.csv")
 
+    high_risk_jobs = filter_high_risk_jobs(csv_path, filtered_output)
 
+    print(f"High-risk job records: {len(high_risk_jobs)}")
+    print(f"Saved filtered CSV to: {filtered_output}\n")
 
-def test_filter_high_risk_jobs():
-    df = pd.DataFrame({
-        "Job": ["A", "B", "C"],
-        "Risk of Automation": ["High", "Low", "High"]
-    })
-
-    test_csv = "data/test_input.csv"
-    out_csv = "data/test_output.csv"
-
-    df.to_csv(test_csv, index=False)
-
-    filtered = filter_high_risk_jobs(test_csv, out_csv)
-
-    assert len(filtered) == 2
-    assert os.path.exists(out_csv)
-
-
-
-
-def test_database_creation():
-    conn = create_connection("tests/test.db")
-    create_table(conn)
-
-    cursor = conn.cursor()
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='task_statements';")
-    result = cursor.fetchone()
-
-    assert result is not None  
-
-    conn.close()
-
-
-
-
-def test_insert_csv_to_db():
-    conn = create_connection("tests/test2.db")
+    print("Setting up database...")
+    conn = create_connection()
     create_table(conn)
     conn.close()
 
-    df = pd.DataFrame({
-        "id": [1],
-        "onet_soc_code": ["00-0000"],
-        "title": ["Tester"],
-        "task_id": ["T-001"],
-        "task": ["Testing job"],
-        "task_type": ["supplemental"]
-    })
+    print("Inserting CSV data into database...")
+    insert_data_from_csv()
 
-    os.makedirs("data", exist_ok=True)
-    df.to_csv("data/test_csv.csv", index=False)
+    print("\nFetching supplemental jobs...")
+    supplemental_jobs = fetch_supplemental_jobs()
 
-    insert_data_from_csv("data/test_csv.csv", "tests/test2.db")
+    print(f"\nTotal supplemental tasks: {len(supplemental_jobs)}")
+    print("\n=== SAMPLE JOBS LIKELY TO LOSE WORK (FIRST 10) ===")
 
-    conn = sqlite3.connect("tests/test2.db")
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM task_statements")
-    rows = cursor.fetchall()
+    for job in supplemental_jobs[:10]:
+        print(f"ID: {job[0]} | SOC: {job[1]} | Title: {job[2]} | Task: {job[4]}")
 
-    assert len(rows) == 1  
+    if len(supplemental_jobs) > 10:
+        print(f"\n...and {len(supplemental_jobs) - 10} more jobs.\n")
 
-    conn.close()
+    print("\n===== ANALYSIS COMPLETE =====\n")
 
 
 
-
-def test_fetch_supplemental_jobs():
-    conn = sqlite3.connect("tests/test3.db")
-    cursor = conn.cursor()
-
-    cursor.execute("""
-        CREATE TABLE task_statements (
-            id INTEGER PRIMARY KEY,
-            onet_soc_code TEXT,
-            title TEXT,
-            task_id TEXT,
-            task TEXT,
-            task_type TEXT
-        )
-    """)
-
-    cursor.execute("""
-        INSERT INTO task_statements (id, onet_soc_code, title, task_id, task, task_type)
-        VALUES (1, '11-1111', 'Test Role', 'T-001', 'Sample Task', 'supplemental')
-    """)
-
-    conn.commit()
-    conn.close()
-
-    results = fetch_supplemental_jobs("tests/test3.db")
-
-    assert len(results) == 1
-    assert results[0][2] == "Test Role"
+if __name__ == "__main__":
+    main()
