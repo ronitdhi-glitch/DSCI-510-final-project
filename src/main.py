@@ -5,6 +5,7 @@ import pandas as pd
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
 
+# Local modules imports for the project
 from kaggle_service import download_kaggle_dataset
 from job_filter import filter_high_risk_jobs as filter_high_risk_jobs_kaggle
 from data_filter import get_supplemental_jobs
@@ -37,8 +38,7 @@ def run_kaggle_ai_job_loss_analysis():
     print("\n****** AI Job Analysis Finished ******\n")
     
 def run_supplemental_filter():
-
-    
+    # Filter occupations that include "Supplemental" task type. 
     csv_file = os.path.join(BASE_DIR, "..", "data", "Task Statements.csv")
     result = get_supplemental_jobs(csv_file)
 
@@ -54,6 +54,7 @@ def run_supplemental_filter():
 # State High-Risk Job Analysis
 
 def run_state_risk_analysis():
+    # Analyze high risk occupations at US state level. 
     print("\n STATE HIGH-RISK ANALYSIS")
 
     df = load_state_data()
@@ -122,3 +123,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
