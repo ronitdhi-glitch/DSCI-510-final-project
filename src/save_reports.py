@@ -14,7 +14,7 @@ def save_summary(top, bottom, total_jobs):
     # Write summary
     with open(summary_path, "w") as f:
         f.write("AI JOB LOSS ANALYSIS REPORT\n")
-        f.write("===========================\n\n")
+        
         
         f.write(f"Total Jobs Predicted to be Lost: {total_jobs}\n\n")
         
