@@ -2,13 +2,9 @@ import os
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-REPORTS_DIR = os.path.join(BASE_DIR, "..", "reports")
-
+from config import REPORTS_DIR
 
 os.makedirs(REPORTS_DIR, exist_ok=True)
-
 
 def plot_top_10(df):
     plt.figure(figsize=(12,6))
@@ -17,10 +13,9 @@ def plot_top_10(df):
     plt.title("Top 10 States at Highest AI Automation Risk")
     plt.xlabel("State")
     plt.ylabel("Estimated Job Loss Risk")
-    plt.tight_layout()
 
-    save_path = os.path.join(REPORTS_DIR, "top_10_states.png")
-    plt.savefig(save_path)
+    plt.tight_layout()
+    plt.savefig(os.path.join(REPORTS_DIR, "top_10_states.png"))
     plt.close()
 
 
@@ -31,10 +26,9 @@ def plot_bottom_10(df):
     plt.title("Bottom 10 States at Lowest AI Automation Risk")
     plt.xlabel("State")
     plt.ylabel("Estimated Job Loss Risk")
-    plt.tight_layout()
 
-    save_path = os.path.join(REPORTS_DIR, "bottom_10_states.png")
-    plt.savefig(save_path)
+    plt.tight_layout()
+    plt.savefig(os.path.join(REPORTS_DIR, "bottom_10_states.png"))
     plt.close()
 
 
@@ -45,6 +39,5 @@ def plot_distribution(df):
     plt.xlabel("Probability")
     plt.ylabel("Number of Occupations")
 
-    save_path = os.path.join(REPORTS_DIR, "probability_distribution.png")
-    plt.savefig(save_path)
+    plt.savefig(os.path.join(REPORTS_DIR, "probability_distribution.png"))
     plt.close()

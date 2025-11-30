@@ -1,5 +1,10 @@
 import pandas as pd
+
 # This function calculates nimber of high risk automation jobs specifically for the state of california. 
+
+
+# This function calculates number of high risk automation jobs specifically fro the state of California. 
+
 def calculate_state_risky_jobs(file_path):
     df = pd.read_csv(file_path, encoding="latin1")  
 
@@ -8,7 +13,11 @@ def calculate_state_risky_jobs(file_path):
 
     median_prob = probabilities.median()
     high_risk = df[probabilities >= median_prob]
+
     # multiply California employment by automation probability to estimate toal number of risky jobs in the state. 
+
+# Multiply California employment by autoation probability to estimate total number of risky jobs in the state. 
+
     total_risky_jobs = (high_risk["California"] * high_risk["Probability"]).sum()
 
     risky_csv_path = "data/risky_jobs_california.csv"

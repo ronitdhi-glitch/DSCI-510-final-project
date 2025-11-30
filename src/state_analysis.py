@@ -1,5 +1,9 @@
 def filter_high_risk_jobs(df):
     # Returns only occupations where Probability is greater than the median 0.640.
+
+    """
+    Returns only occupations where Probability is greater than the median 0.640. 
+    """
     return df[df["probability"] > 0.640]
 
 
@@ -12,6 +16,17 @@ def get_top_states(df):
     state_loss = {}
     for state in state_columns:
     # multiply probability * employment count per state and then sum across all occupations. 
+
+   #  Return the top 10 states with the highest estimated job loss risk. 
+
+    # Identify the coloumns representing each US state. 
+        state_columns = df.columns[3:]   
+
+    # Created a dictionary to store state level job loss estimates
+    state_loss = {}
+    for state in state_columns:
+        # Multiply employment in the state bu automation probability. 
+        # Sum across all occupations. 
         state_loss[state] = (df[state] * df["probability"]).sum()
 
     
@@ -25,7 +40,11 @@ def get_top_states(df):
 
 
 def get_bottom_states(df):
+
     # Calculates and return the 10 states with the lowest estimated job loss.
+
+    # Calculates and return the 10 states with the lowest estimated job loss. 
+
     state_columns = df.columns[3:]
 
     state_loss = {}

@@ -2,18 +2,10 @@ import os
 import zipfile
 from kaggle.api.kaggle_api_extended import KaggleApi
 
-
-DATASET = "sahilislam007/ai-impact-on-job-market-20242030"
-DOWNLOAD_DIR = "data"
-CSV_NAME = "ai_job_trends_dataset.csv"  # Kaggle file inside ZIP
+from config import DATASET, DOWNLOAD_DIR, CSV_NAME
 
 
 def download_kaggle_dataset():
-    """
-    Downloads the Kaggle dataset if not already downloaded.
-    Returns: path to extracted CSV file.
-    """
-
     os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
     api = KaggleApi()
@@ -25,11 +17,10 @@ def download_kaggle_dataset():
         print("Downloading Kaggle dataset...")
         api.dataset_download_files(DATASET, path=DOWNLOAD_DIR, unzip=False)
     else:
-        print("Dataset already downloaded. Skipping download.")
+        print("Dataset already downloaded. Skipping.")
 
     print("Extracting ZIP...")
     with zipfile.ZipFile(zip_path, "r") as z:
         z.extractall(DOWNLOAD_DIR)
 
-    csv_path = os.path.join(DOWNLOAD_DIR, CSV_NAME)
-    return csv_path
+    return os.path.join(DOWNLOAD_DIR, CSV_NAME)

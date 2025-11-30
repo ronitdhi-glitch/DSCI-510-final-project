@@ -6,12 +6,12 @@ def calculate_county_cost(file_path, total_risky_jobs):
 
     year_row = df.iloc[0]
 
-  
+
     new_cols = []
     for col, yr in zip(df.columns, year_row):
         yr = str(yr).strip()
 
-        # If yr is a valid year value, use it
+        
         if yr.isdigit() and yr in ["2020","2021","2022","2023","2024"]:
             new_cols.append(yr)
         else:
@@ -19,11 +19,11 @@ def calculate_county_cost(file_path, total_risky_jobs):
 
     df.columns = new_cols
 
-    # Remove the first row (since it only contained year labels)
+    
     df = df.iloc[1:].reset_index(drop=True)
 
     if "Geographic Area" not in df.columns:
-        # It is always the first column in your CSV
+        
         df = df.rename(columns={df.columns[0]: "Geographic Area"})
 
     df["Geographic Area"] = (
@@ -42,7 +42,7 @@ def calculate_county_cost(file_path, total_risky_jobs):
 
     print(f"➡ Latest year column detected: {latest_year}")
 
-    # Convert population to numeric
+    
     df[latest_year] = (
         df[latest_year]
         .astype(str)
@@ -51,7 +51,7 @@ def calculate_county_cost(file_path, total_risky_jobs):
         .astype(float)
     )
 
-    # Extract California population
+    
     california_population = df[df["Geographic Area"] == "California"][latest_year].values[0]
 
     counties = df[df["Geographic Area"] != "California"].copy()
@@ -60,7 +60,7 @@ def calculate_county_cost(file_path, total_risky_jobs):
     counties["county_jobs_risk"] = counties["county_share"] * total_risky_jobs
     counties["cost_county"] = counties["county_jobs_risk"] * 350 * 26
 
-    # 
+     
     out_path = "data/california_county_risk.csv"
     counties.to_csv(out_path, index=False)
 
