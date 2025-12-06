@@ -4,4 +4,3 @@ data format in csv
 kaggle
 numpy
 O*NET Database
-flask pandas
