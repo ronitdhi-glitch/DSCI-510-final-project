@@ -9,9 +9,9 @@ Potential future workforce implications
 # Running Analysis
 How to install: the user should ensure that requried python libraries are installed in the system. (pip install pandas matplotlib kaggle)
 
-How to run : The project processes data, filters high-risk occupations, performs state and county analysis, and generates graphs and reports automatically through main.py.
+How to run : The project processes data, filters high-risk occupations, performs state and county analysis, run main.py file which generates graphs and reports automatically. 
 
-This automatically:
+This happens automatically:
 
 Downloads and filters Kaggle dataset
 Generates supplemental job analysis
