@@ -33,6 +33,9 @@ from utils import plot_top_risk_jobs
 from charts import generate_all_graphs
 from downloader import download_file
 
+from file_manager import create_data_folder
+
+
 
 def run_kaggle_ai_job_loss_analysis():
     print("\n****** AI Jobs Analysis Beginning ****** \n")
@@ -103,12 +106,22 @@ def run_california_automation_analysis():
     print("\n All Analysis Completed")
 
 
+
 def main():
-    print("Step 1: Downloading required CSV datasets...\n")
+    print("Step 1: Ensuring data folder exists...\n")
 
-    data_folder = os.path.join(os.getcwd(), "data")
-    os.makedirs(data_folder, exist_ok=True)
+    # -----------------------------------------
+    # CALLING THE FUNCTION HERE:
+    # This creates the /data folder OUTSIDE the /src directory.
+    # -----------------------------------------
+    data_folder = create_data_folder()
+    print(f"Using data folder: {data_folder}\n")
 
+
+
+    print("Step 2: Downloading required CSV datasets...\n")
+
+    # Download files into the created data folder
     for link, name in zip(DRIVE_LINKS, DOWNLOADED_FILE_NAMES):
         download_file(link, name, data_folder)
 
@@ -120,5 +133,7 @@ def main():
     run_california_automation_analysis()
 
 
+
+# Required for standalone execution
 if __name__ == "__main__":
     main()
