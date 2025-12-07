@@ -1,53 +1,69 @@
-# DSCI-510 Final Project – AI & Automation Workforce Impact Analysis
+Introduction: 
+This project analyzes how Artificial Intelligence and automation technologies are impacting the workforce in the United States. The goal is to identify which occupations are most vulnerable to job displacement, evaluate geographic exposure, and estimate economic impact across states specifically the state of California and counties. The analysis combines multiple datasets (Kaggle, O*NET, Census) to: 
+Identify high-risk occupations based on automation probability
+Perform U.S. state-level and California county-level job-loss analysis
+Estimate economic impact of job displacement
+Generate automated visualizations and reports
+The model predicts workforce vulnerability using occupational task analysis and probability scoring derived from Frey & Osborne (2017).
 
-This project analyzes how Artificial Intelligence and automation technologies are reshaping the workforce in the United States. The goal is to identify which occupations are most vulnerable to job displacement, evaluate geographic exposure, and estimate economic impact across states and counties.
+## Data Sources:
+| **Dataset**                               | **Type** | **Format**                      | **Raw Data Size** |
+|-------------------------------------------|----------|----------------------------------|--------------------|
+| O*NET Database                            | File     | CSV                              | 18798              |
+| ai_job_trends.csv                         | API      | HTML response → JSON → CSV       | 10006              |
+| county_data_1                             | File     | CSV                              | 67                 |
+| Frey & Osborne (2017) Automation Risk     | File     | CSV                              | 703                |
 
 
+## Analysis
 
-## **Project Overview**
-The analysis combines multiple datasets (Kaggle, O*NET, Census) to:
--> Identify high‑risk occupations based on automation probability.
--> Perform U.S. state‑level and California county‑level job loss analysis.
--> Estimate financial impact of job displacement.
--> Generate automated visualizations and reports.
+This section explains the type of analysis conducted throughout the project.
 
-This model predicts workforce vulnerability using occupational task analysis and probability scoring derived from Frey & Osborne (2017).
+Steps:
 
-## ⚙️ **Running Analysis**
-This section explains how to execute the code and reproduce results.
+Data Loading – Import datasets using load_data.py
 
-### **Environment Setup**
-Create and activate virtual environment (recommended):
-```bash
-python -m venv env
-source env/bin/activate   # Mac/Linux
-env\Scripts\activate     # Windows
-```
+AI Job Loss Classification – Extract automation risk using job_filter.py
 
-### **Install Required Libraries**
-```bash
-pip install -r requirements.txt
-```
-If running manually, make sure the following libraries are installed:
+Supplemental Occupation Filtering – Score jobs based on exposure level
 
-pandas
-matplotlib
-seaborn
-kaggle
-openpyxl
+State-Level Analysis – Compare high-risk job volumes across U.S. states
 
-### **Set Up Kaggle API Credentials**
-You must configure Kaggle API to automatically download datasets:
-```
-Place kaggle.json file under: ~/.kaggle/   (Mac)
-Place kaggle.json under: C:\Users\<username>\.kaggle\ (Windows)
-```
-Then give permissions:
-```bash
-chmod 600 ~/.kaggle/kaggle.json
-```
+County-Level Cost Analysis – Estimate economic loss/impact for California
 
-### How to Run the Project**
+Visualization – Generate charts & heatmaps using charts.py
+
+Algorithms / Methods
+
+Binary risk classifier: probability > 0.64 = high-risk, probability < 0.64 = low-risk
+
+Impact model: workforce population × risk probability
+
+Task-based clustering: job similarity through task weights
+
+Cost estimation: avg salary x population at risk x average weeks the salary is expected to be paid
+
+Training Inputs / Key Fields
+
+Task importance weight
+
+Job specialization & automation percentage
+
+Workforce population (state & county)
+
+Salary & economic exposure metrics
+
+
+## Summary of Results:
+2,134+ occupations identified at high-risk of automation
+
+AI impact varies significantly across regions especially in those with high concentreation of service sector jobs
+
+Certain CA counties show extremely high projected economic losses for example Los Angeles
+
+Visualizations highlight concentrated exposure in routine and redundant job categories which require low skill and trainiing. 
+
+### How to Run the Project
 Run main automation pipeline:
 
 python main.py
@@ -59,47 +75,19 @@ This script automatically:
 - Generates plots and Excel reports inside the `reports/` folder
 
 
-## Visual Output Examples
+## Screenshots / Visual Output Examples
 
 Below are sample visuals automatically generated in the `reports/` folder:
 - High‑risk occupations bar chart
-- State comparison visualization
-- California county‑level automation cost heatmap
+- State with highest and lowest automation risk comparing visualization
+- California county‑level automation cost bar chart
 - Summary table export in Excel format
-
-(Place sample images into `reports/` and reference here when publishing on GitHub.)
-
-
-## Analysis / Model & Pipeline Design
-This section explains how the analysis was performed and methodology used.
-
-### **Pipeline Steps**
-1. Data Loading** – Import datasets using `load_data.py`
-2. AI Job Loss Classification** – Extract automation risk using `job_filter.py`
-3. Supplemental Occupation Filtering** – Score jobs based on exposure level
-4. State‑Level Analysis** – Compare high‑risk job volumes across U.S. states
-5. County‑Level Cost Analysis** – Estimate economic loss for California
-6. Visualization** – Generate bar charts & risk heat‑maps using `charts.py`
-
-### **Algorithm / Statistical Methods Used**
-
- Occupation risk labeling : Binary classifier based on automation probability threshold (>0.64 = high risk) 
- Workforce impact : Weighted population + automation score matrix 
- Occupational clustering : Task similarity and dependency structure 
- Cost estimation : AVG salary × population × risk probability 
-
-### **Training Inputs / Dataset Fields**
-- Task importance weight
-- Job specialization & automation percentage
-- Workforce population by state and county
-- Salary / economic risk value
 
 
 ##  **Running Tests**
 To verify functions execution:
-```bash
 python tests/tests.py
-```
+
 Functions tested:
 - `run_kaggle_ai_job_loss_analysis()`
 - `run_supplemental_filter()`
@@ -124,39 +112,9 @@ src/
 ├── data/      # raw and processed datasets
 ├── reports/   # generated plots and Excel files
 └── tests/     # unit testing scripts
-```
 
----
 
-##  **Results Summary**
-- **2134 occupations** identified at **high‑risk** of automation
-- AI impact varies significantly between regions
-- County‑level cost evaluations reveal major economic exposure zones
-- Thousands of jobs estimated to be disrupted across the U.S.
 
-## **Data Sources**
-- Kaggle – AI Job Trends Dataset
-- O*NET — Task Statements.csv
-- Frey & Osborne (2017) Automation Research
-- U.S. Census: Population statistics by county
 
----
 
-##  Findings / Research Insight
-AI is expected to automate routine and repetitive job categories first. Technical, creative, and strategic jobs show lower risk. The project supports workforce policy planning and educational priorities.
 
----
-
-##  Future Work
-- Predictive forecasting using regression models
-- Industry‑level heat‑map + time‑based automation timeline
-- Interactive dashboard deployment (Streamlit / PowerBI)
-
----
-
-##  Author
-**Ronit Dhir** — DSCI‑510 Final Project
-
----
-
-Thank you for reviewing this project!
