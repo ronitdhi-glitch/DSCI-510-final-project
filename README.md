@@ -68,11 +68,15 @@ Run main automation pipeline:
 
 python main.py
 
-This script automatically:
 - Downloads and filters Kaggle dataset
+- ### Set Up Kaggle API Credentials
+- You must configure Kaggle API to automatically download datasets:
+- Place kaggle.json file under: ~/.kaggle/   (Mac)
+- Place kaggle.json under: C:\Users\<username>\.kaggle\ (Windows)
 - Performs occupational risk classification
 - Executes state‑level and county‑level analysis
-- Generates plots and Excel reports inside the `reports/` folder
+- Generates plots and csv reports inside the `reports/` folder
+  
 
 
 ## Screenshots / Visual Output Examples
