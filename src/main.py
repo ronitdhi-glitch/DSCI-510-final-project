@@ -110,10 +110,7 @@ def run_california_automation_analysis():
 def main():
     print("Step 1: Ensuring data folder exists...\n")
 
-    # -----------------------------------------
-    # CALLING THE FUNCTION HERE:
-    # This creates the /data folder OUTSIDE the /src directory.
-    # -----------------------------------------
+   
     data_folder = create_data_folder()
     print(f"Using data folder: {data_folder}\n")
 
@@ -137,3 +134,4 @@ def main():
 # Required for standalone execution
 if __name__ == "__main__":
     main()
+
