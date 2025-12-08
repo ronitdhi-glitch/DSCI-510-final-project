@@ -10,7 +10,7 @@ def shorten(text, words=3):
 def generate_all_graphs(county_csv, risky_csv):
     os.makedirs("reports", exist_ok=True)
 
-    # ---------- COUNTY PIE ----------
+    # county pie chart
     county_df = pd.read_csv(county_csv)
     county_df = county_df.dropna(subset=["county_share"])
     county_top10_share = county_df.nlargest(10, "county_share")
@@ -27,7 +27,7 @@ def generate_all_graphs(county_csv, risky_csv):
     plt.savefig("reports/county_share_pie.png")
     plt.close()
 
-    # ---------- COUNTY COST BAR ----------
+    # cost for counties bar graph
     county_top10_cost = county_df.nlargest(10, "cost_county")
     county_top10_cost["short_label"] = county_top10_cost["Geographic Area"].apply(shorten)
 
@@ -58,7 +58,7 @@ def generate_all_graphs(county_csv, risky_csv):
     plt.savefig("reports/county_cost_bar.png")
     plt.close()
 
-    # ---------- JOB RISK BAR ----------
+    # jobs at risk bar graph
     risky_df = pd.read_csv(risky_csv)
     risky_df["risk_score"] = risky_df["Probability"] * risky_df["California"]
 
@@ -88,7 +88,7 @@ def generate_all_graphs(county_csv, risky_csv):
     plt.savefig("reports/top10_risky_jobs.png")
     plt.close()
 
-    # ---------- SCATTER ----------
+    # scatter plot
     top10_scatter = risky_df.nlargest(10, "risk_score")
     top10_scatter["short_name"] = top10_scatter["Occupation"].apply(
         lambda x: x[:18] + "..." if len(str(x)) > 18 else str(x)
@@ -122,3 +122,4 @@ def generate_all_graphs(county_csv, risky_csv):
     print("  ✓ top10_risky_jobs.png")
     print("  ✓ task_vs_probability_scatter.png")
     print("  ✓ state_automation_bubble.png")
+
